@@ -1,4 +1,5 @@
 #include "apue.h"
+#include "error.h"
 #include <pthread.h>
 
 pthread_t ntid;
