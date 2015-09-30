@@ -29,13 +29,16 @@ main(void)
 	err = pthread_create(&tid2, NULL, thr_fn2, NULL);
 	if (err != 0)
 		err_exit(err, "can't create thread 2");
-	err = pthread_join(tid1, &tret);
+
+	err = pthread_join(tid1, &tret); // 可获取线程1的返回值
 	if (err != 0)
 		err_exit(err, "can't join with thread 1");
 	printf("thread 1 exit code %ld\n", (long)tret);
-	err = pthread_join(tid2, &tret);
+
+	err = pthread_join(tid2, &tret);// 可获取线程1的exit值
 	if (err != 0)
 		err_exit(err, "can't join with thread 2");
 	printf("thread 2 exit code %ld\n", (long)tret);
+
 	exit(0);
 }
