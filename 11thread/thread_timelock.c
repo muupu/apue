@@ -6,7 +6,7 @@ void get_time(char *buf, int len, struct timespec *tout)
 {
 	struct tm *tmp; // 日期和时间
 	clock_gettime(CLOCK_REALTIME, tout); // 系统实时时间
-	tmp = localtime(tout->tv_sec); // 转换成时间日期表示法
+	tmp = localtime(&(tout->tv_sec)); // 转换成时间日期表示法
 	strftime(buf, len, "%r", tmp); // 格式化时间
 }
 
