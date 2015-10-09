@@ -2,10 +2,10 @@
 
 int func(int n)
 {
-    int sum=0,i;
-    for (i=0; i<n; i++)
+    int sum=0, i;
+    for (i = 0; i < n; i++)
     {
-        sum+=i;
+        sum += i;
     }
     return sum;
  }
@@ -14,8 +14,8 @@ int func(int n)
 int main(void)
 {
     int i;
-    long result = 0;
-    for (i=1; i<=100; i++)
+    int result = 0;
+    for (i = 1; i <= 100; i++)
     {
          result += i;
     }
