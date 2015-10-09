@@ -5,10 +5,10 @@ char *l_opt_arg;
 char* const opt_string = "nbl:";
 
 struct option long_options[] = {
-	{ "name",    0,  NULL, 'n' },
-	{ "bf_name", 0,  NULL, 'b' },
-	{ "love",    1,  NULL, 'l' },
-	{ 0,         0,  0,     0},
+	{ "name",    0,  NULL, 'n'},
+	{ "bf_name", 0,  NULL, 'b'},
+	{ "love",    1,  NULL, 'l'},
+	{ NULL,      0,  NULL,  0 },
 };
 
 int main(int argc, char *argv[])
