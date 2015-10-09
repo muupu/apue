@@ -5,7 +5,7 @@ char *l_opt_arg;
 char* const opt_string = "nbl:";
 
 struct option long_options[] = {
-	{ "name",    0,  NULL, 'n'},
+	{ "name",    0,  NULL, 'a'},
 	{ "bf_name", 0,  NULL, 'b'},
 	{ "love",    1,  NULL, 'l'},
 	{ NULL,      0,  NULL,  0 },
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 	{
 		switch (c)
 		{
-			case 'n':
+			case 'a':
 				printf("My name is XL.\n");
 				break;
 			case 'b':
