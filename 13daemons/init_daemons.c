@@ -65,6 +65,7 @@ daemonize(const char *cmd)
 
 	/*
 	 * Attach file descriptors 0, 1, and 2 to /dev/null.
+	 * 这样可使任何一个试图读标准输入、写输入或标志错误的库例程都不会有任何效果
 	 */
 	fd0 = open("/dev/null", O_RDWR);
 	fd1 = dup(0);
