@@ -13,8 +13,9 @@ daemonize(const char *cmd)
 
 	/*
 	 * Clear file creation mask.
+	 * 将文件模式创建屏蔽字设置为一个已知值。
 	 */
-	umask(0);
+	umask(0); 
 
 	/*
 	 * Get maximum number of file descriptors.
@@ -24,6 +25,7 @@ daemonize(const char *cmd)
 
 	/*
 	 * Become a session leader to lose controlling TTY.
+	 * 调用fork, 然后使父进程exit
 	 */
 	if ((pid = fork()) < 0)
 		err_quit("%s: can't fork", cmd);
@@ -47,12 +49,14 @@ daemonize(const char *cmd)
 	/*
 	 * Change the current working directory to the root so
 	 * we won't prevent file systems from being unmounted.
+	 * 将当前目录改为根目录
 	 */
 	if (chdir("/") < 0)
 		err_quit("%s: can't change directory to /", cmd);
 
 	/*
 	 * Close all open file descriptors.
+	 * 关闭不再需要的文件描述符
 	 */
 	if (rl.rlim_max == RLIM_INFINITY)
 		rl.rlim_max = 1024;
