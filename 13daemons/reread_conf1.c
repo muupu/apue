@@ -55,12 +55,13 @@ main(int argc, char *argv[])
 		cmd++;
 
 	/*
-	 * Become a daemon.
+	 * Become a daemon.初始化守护进程
 	 */
 	daemonize(cmd);
 
 	/*
 	 * Make sure only one copy of the daemon is running.
+	 * 确保该守护线程只有一个副本在运行
 	 */
 	if (already_running()) {
 		syslog(LOG_ERR, "daemon already running");
@@ -69,6 +70,7 @@ main(int argc, char *argv[])
 
 	/*
 	 * Restore SIGHUP default and block all signals.
+	 * 恢复SIGHUP信号的系统默认处理方式；阻塞所有信号
 	 */
 	sa.sa_handler = SIG_DFL;
 	sigemptyset(&sa.sa_mask);
@@ -81,6 +83,7 @@ main(int argc, char *argv[])
 
 	/*
 	 * Create a thread to handle SIGHUP and SIGTERM.
+	 * 创建一个线程等待SIGHUP和SIGTERM;若接收到SIGHUP则重读配置文件
 	 */
 	err = pthread_create(&tid, NULL, thr_fn, 0);
 	if (err != 0)
