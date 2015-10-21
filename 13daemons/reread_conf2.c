@@ -51,6 +51,7 @@ main(int argc, char *argv[])
 
 	/*
 	 * Handle signals of interest.
+	 * 为SIGHUP和SIGTERM配置了信号处理程序
 	 */
 	sa.sa_handler = sigterm;
 	sigemptyset(&sa.sa_mask);
