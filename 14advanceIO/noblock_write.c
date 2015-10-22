@@ -1,4 +1,5 @@
 #include "apue.h"
+#include "error.h"
 #include <errno.h>
 #include <fcntl.h>
 
@@ -10,10 +11,10 @@ main(void)
 	int		ntowrite, nwrite;
 	char	*ptr;
 
-	ntowrite = read(STDIN_FILENO, buf, sizeof(buf));
+	ntowrite = read(STDIN_FILENO, buf, sizeof(buf));// 从标准输入500000字节
 	fprintf(stderr, "read %d bytes\n", ntowrite);
 
-	set_fl(STDOUT_FILENO, O_NONBLOCK);	/* set nonblocking */
+	set_fl(STDOUT_FILENO, O_NONBLOCK);	/* set nonblocking 设置标准输出为非阻塞*/
 
 	ptr = buf;
 	while (ntowrite > 0) {
