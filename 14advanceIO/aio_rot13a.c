@@ -5,7 +5,7 @@
 #include <errno.h>
 
 #define BSZ 4096
-#define NBUF 8
+#define NBUF 8 // 8个缓冲区--> 最多8个异步IO请求处于等待状态
 
 enum rwop {
 	UNUSED = 0,
@@ -25,7 +25,17 @@ struct buf bufs[NBUF];
 unsigned char
 translate(unsigned char c)
 {
-	/* same as before */
+	if (isalpha(c)) {
+		if (c >= 'n')
+			c -= 13;
+		else if (c >= 'a')
+			c += 13;
+		else if (c >= 'N')
+			c -= 13;
+		else
+			c += 13;
+	}
+	return(c);
 }
 
 int
