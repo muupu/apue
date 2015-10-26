@@ -24,7 +24,7 @@ main(int argc, char *argv[])
 	if ((pid = fork()) < 0) {
 		err_sys("fork error");
 	} else if (pid > 0) {								/* parent */
-		close(fd[0]);		/* close read end */
+		close(fd[0]);		/* close read end 父进程关闭管道读端 */
 
 		/* parent copies argv[1] to pipe */
 		while (fgets(line, MAXLINE, fp) != NULL) {
@@ -41,9 +41,9 @@ main(int argc, char *argv[])
 			err_sys("waitpid error");
 		exit(0);
 	} else {										/* child */
-		close(fd[1]);	/* close write end */
+		close(fd[1]);	/* close write end 子进程关闭管道写端*/
 		if (fd[0] != STDIN_FILENO) {
-			if (dup2(fd[0], STDIN_FILENO) != STDIN_FILENO)
+			if (dup2(fd[0], STDIN_FILENO) != STDIN_FILENO) /* 子进程调用dup2，使其标准输入成为管道的读端*/
 				err_sys("dup2 error to stdin");
 			close(fd[0]);	/* don't need this after dup2 */
 		}
