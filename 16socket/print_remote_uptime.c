@@ -37,6 +37,8 @@ main(int argc, char *argv[])
 	hint.ai_next = NULL;
 	if ((err = getaddrinfo(argv[1], "ruptime", &hint, &ailist)) != 0)
 		err_quit("getaddrinfo error: %s", gai_strerror(err));
+	// 如果服务器支持多重网络接口或多重网络协议，getaddrinfo可能会返回多个后续地址
+	// 轮流尝试对每个地址进行连接，找到一个便可停止
 	for (aip = ailist; aip != NULL; aip = aip->ai_next) {
 		if ((sockfd = connect_retry(aip->ai_family, SOCK_STREAM, 0,
 		  aip->ai_addr, aip->ai_addrlen)) < 0) {
