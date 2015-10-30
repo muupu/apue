@@ -14,6 +14,7 @@ print_uptime(int sockfd)
 	int		n;
 	char	buf[BUFLEN];
 
+	// 因为使用的是SOCK_STREAM套接字，所以不能保证一次recv就能读取整个字符串
 	while ((n = recv(sockfd, buf, BUFLEN, 0)) > 0)
 		write(STDOUT_FILENO, buf, n);
 	if (n < 0)
