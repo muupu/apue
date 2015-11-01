@@ -6,6 +6,7 @@
 #define BUFLEN		128
 #define TIMEOUT		20
 
+
 void
 sigalrm(int signo)
 {
@@ -18,12 +19,13 @@ print_uptime(int sockfd, struct addrinfo *aip)
 	char	buf[BUFLEN];
 
 	buf[0] = 0;
+	// 向服务器发送1字节的数据
 	if (sendto(sockfd, buf, 1, 0, aip->ai_addr, aip->ai_addrlen) < 0)
 		err_sys("sendto error");
 	alarm(TIMEOUT);
 	if ((n = recvfrom(sockfd, buf, BUFLEN, 0, NULL, NULL)) < 0) {
 		if (errno != EINTR)
-			alarm(0);
+			alarm(0); // 使用alarm函数来避免调用recvfrom时的无限期阻塞
 		err_sys("recv error");
 	}
 	alarm(0);
