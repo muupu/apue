@@ -36,7 +36,7 @@ serve(int sockfd)
 			sendto(sockfd, buf, strlen(buf), 0, addr, alen);
 		} else {
 			if (fgets(buf, BUFLEN, fp) != NULL)
-				sendto(sockfd, buf, strlen(buf), 0, addr, alen);
+				sendto(sockfd, buf, strlen(buf), 0, addr, alen); // 从recvfrom获得的发送者地址addr
 			pclose(fp);
 		}
 	}
