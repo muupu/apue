@@ -12,6 +12,7 @@ main(void)
 	strcpy(un.sun_path, "foo.socket");
 	if ((fd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0)
 		err_sys("socket failed");
+	// 绑定地址长度：计算sun_path成员在sockaddr_un结构中的偏移量，然后与路径名长度相加
 	size = offsetof(struct sockaddr_un, sun_path) + strlen(un.sun_path);
 	if (bind(fd, (struct sockaddr *)&un, size) < 0)
 		err_sys("bind failed");
