@@ -11,6 +11,7 @@
  * We also obtain the client's user ID from the pathname
  * that it must bind before calling us.
  * Returns new fd if all OK, <0 on error
+ * 当收到一个客户进程的连接请求时，服务器进程调用serv_accept进程
  */
 int
 serv_accept(int listenfd, uid_t *uidptr)
@@ -26,6 +27,7 @@ serv_accept(int listenfd, uid_t *uidptr)
 	if ((name = malloc(sizeof(un.sun_path + 1))) == NULL)
 		return(-1);
 	len = sizeof(un);
+	// clifd是连接到客户进程的崭新描述符
 	if ((clifd = accept(listenfd, (struct sockaddr *)&un, &len)) < 0) {
 		free(name);
 		return(-2);		/* often errno=EINTR, if signal caught */
@@ -35,6 +37,7 @@ serv_accept(int listenfd, uid_t *uidptr)
 	len -= offsetof(struct sockaddr_un, sun_path); /* len of pathname */
 	memcpy(name, un.sun_path, len);
 	name[len] = 0;			/* null terminate */
+	// 验证：该路径名确实是一个套接字；其权限仅允许用户读、写及执行
 	if (stat(name, &statbuf) < 0) {
 		rval = -3;
 		goto errout;
