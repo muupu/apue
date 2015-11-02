@@ -20,7 +20,7 @@ serv_listen(const char *name)
 		return(-1);
 	}
 
-	/* create a UNIX domain stream socket */
+	/* 调用socket创建一个UNIX域套接字 */
 	if ((fd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0)
 		return(-2);
 
