@@ -15,17 +15,17 @@ csopen(char *name, int oflag)
 	static int		fd[2] = { -1, -1 };
 
 	if (fd[0] < 0) {	/* fork/exec our open server first time */
-		if (fd_pipe(fd) < 0) {
+		if (fd_pipe(fd) < 0) { // 创建fd管道
 			err_ret("fd_pipe error");
 			return(-1);
 		}
 		if ((pid = fork()) < 0) {
 			err_ret("fork error");
 			return(-1);
-		} else if (pid == 0) {		/* child */
+		} else if (pid == 0) {		/* child 子进程关闭fd管道一端*/
 			close(fd[0]);
 			if (fd[1] != STDIN_FILENO &&
-			  dup2(fd[1], STDIN_FILENO) != STDIN_FILENO)
+			  dup2(fd[1], STDIN_FILENO) != STDIN_FILENO)  // 子进程将fd管道的一端复制到其标准输入和标准输出
 				err_sys("dup2 error to stdin");
 			if (fd[1] != STDOUT_FILENO &&
 			  dup2(fd[1], STDOUT_FILENO) != STDOUT_FILENO)
@@ -33,7 +33,7 @@ csopen(char *name, int oflag)
 			if (execl("./opend", "opend", (char *)0) < 0)
 				err_sys("execl error");
 		}
-		close(fd[1]);				/* parent */
+		close(fd[1]);				/* parent 父进程关闭管道另一端*/
 	}
 	sprintf(buf, " %d", oflag);		/* oflag to ascii */
 	iov[0].iov_base = CL_OPEN " ";		/* string concatenation */
