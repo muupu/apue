@@ -39,10 +39,9 @@ loop(void)
 		pollfd[i].revents = 0;
 	}
 
-	/* obtain fd to listen for client requests on */
 	if ((listenfd = serv_listen(CS_OPEN)) < 0)
 		log_sys("serv_listen error");
-	client_add(listenfd, 0);	/* we use [0] for listenfd */
+	client_add(listenfd, 0);	/* [0]用于listenfd描述符 */
 	pollfd[0].fd = listenfd;
 
 	for ( ; ; ) {
@@ -50,7 +49,7 @@ loop(void)
 			log_sys("poll error");
 
 		if (pollfd[0].revents & POLLIN) {
-			/* accept new client request */
+			/* 来自现有客户进程的一个新请求 */
 			if ((clifd = serv_accept(listenfd, &uid)) < 0)
 				log_sys("serv_accept error: %d", clifd);
 			client_add(clifd, uid);
@@ -66,7 +65,7 @@ loop(void)
 		}
 
 		for (i = 1; i < numfd; i++) {
-			if (pollfd[i].revents & POLLHUP) {
+			if (pollfd[i].revents & POLLHUP) { // 客户进程中止
 				goto hungup;
 			} else if (pollfd[i].revents & POLLIN) {
 				/* read argument buffer from client */
@@ -74,7 +73,7 @@ loop(void)
 					log_sys("read error on fd %d", pollfd[i].fd);
 				} else if (nread == 0) {
 hungup:
-					/* the client closed the connection */
+					/* 处理客户进程关闭它这端的连接 */
 					log_msg("closed: uid %d, fd %d",
 					  client[i].uid, pollfd[i].fd);
 					client_del(pollfd[i].fd);
