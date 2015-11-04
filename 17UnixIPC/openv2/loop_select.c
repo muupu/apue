@@ -11,7 +11,7 @@ loop(void)
 
 	FD_ZERO(&allset);
 
-	/* obtain fd to listen for client requests on */
+	/* 创建服务器进程与客户进程连接的端点 */
 	if ((listenfd = serv_listen(CS_OPEN)) < 0)
 		log_sys("serv_listen error");
 	FD_SET(listenfd, &allset);
@@ -24,7 +24,7 @@ loop(void)
 			log_sys("select error");
 
 		if (FD_ISSET(listenfd, &rset)) {
-			/* accept new client request */
+			/* 描述符listenfd可以随时读取，用serv_accept接受新客户的请求 */
 			if ((clifd = serv_accept(listenfd, &uid)) < 0)
 				log_sys("serv_accept error: %d", clifd);
 			i = client_add(clifd, uid);
@@ -41,16 +41,16 @@ loop(void)
 			if ((clifd = client[i].fd) < 0)
 				continue;
 			if (FD_ISSET(clifd, &rset)) {
-				/* read argument buffer from client */
+				/*  */
 				if ((nread = read(clifd, buf, MAXLINE)) < 0) {
 					log_sys("read error on fd %d", clifd);
 				} else if (nread == 0) {
 					log_msg("closed: uid %d, fd %d",
 					  client[i].uid, clifd);
-					client_del(clifd);	/* client has closed cxn */
+					client_del(clifd);	/* read返回0（文件结束）：客户进程已经中止 */
 					FD_CLR(clifd, &allset);
 					close(clifd);
-				} else {	/* process client's request */
+				} else {	/* read返回大于0：客户进程发送一个新请求 */
 					handle_request(buf, nread, clifd, client[i].uid);
 				}
 			}
