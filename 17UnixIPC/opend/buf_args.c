@@ -1,14 +1,10 @@
 #include "apue.h"
 
-#define	MAXARGC		50	/* max number of arguments in buf */
-#define	WHITE	" \t\n"	/* white space for tokenizing arguments */
+#define	MAXARGC		50	
+#define	WHITE	" \t\n"	
 
 /*
- * buf[] contains white-space-separated arguments.  We convert it to an
- * argv-style array of pointers, and call the user's function (optfunc)
- * to process the array.  We return -1 if there's a problem parsing buf,
- * else we return whatever optfunc() returns.  Note that user's buf[]
- * array is modified (nulls placed after each token).
+ * 将字符串分解成标准argv型参数表，并调用用户函数处理参数
  */
 int
 buf_args(char *buf, int (*optfunc)(int, char **))
@@ -19,7 +15,7 @@ buf_args(char *buf, int (*optfunc)(int, char **))
 	if (strtok(buf, WHITE) == NULL)		/* an argv[0] is required */
 		return(-1);
 	argv[argc = 0] = buf;
-	while ((ptr = strtok(NULL, WHITE)) != NULL) {
+	while ((ptr = strtok(NULL, WHITE)) != NULL) { // 将字符串分割成独立的参数
 		if (++argc >= MAXARGC-1)	/* -1 for room for NULL at end */
 			return(-1);
 		argv[argc] = ptr;
