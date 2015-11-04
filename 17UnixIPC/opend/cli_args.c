@@ -1,9 +1,7 @@
 #include	"opend.h"
 
 /*
- * This function is called by buf_args(), which is called by
- * handle_request().  buf_args() has broken up the client's
- * buffer into an argv[] style array, which we now process.
+ * 由buf_args调用，用来验证客户进程发送的参数个数是否正确
  */
 int
 cli_args(int argc, char **argv)
